@@ -1,0 +1,20 @@
+package cn.diy.dy.activity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import cn.diy.dy.R;
+
+public class MainActivity extends AppCompatActivity {
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Intent intent = new Intent(MainActivity.this,DyMainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+}

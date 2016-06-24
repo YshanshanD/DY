@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_movie"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="电影" />
+        <item
+            android:id="@+id/nav_tv"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="电视剧" />
+        <item
+            android:id="@+id/nav_anime"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="动漫" />
+        <item
+            android:id="@+id/nav_search"
+            android:icon="@drawable/ic_menu_search"
+            android:title="搜素" />
+    </group>
+
+    <item android:title="Custom">
+        <menu>
+            <item
+                android:id="@+id/nav_oscar"
+                android:icon="@drawable/ic_menu_share"
+                android:title="奥斯卡" />
+            <item
+                android:id="@+id/nav_collection"
+                android:icon="@drawable/ic_menu_send"
+                android:title="收藏" />
+        </menu>
+    </item>
+
+</menu>
