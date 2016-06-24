@@ -61,7 +61,7 @@ public class DyMainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        if(drawer != null) {
+        if (drawer != null) {
             drawer.setDrawerListener(toggle);
         }
         toggle.syncState();
@@ -185,16 +185,18 @@ public class DyMainActivity extends AppCompatActivity
 
     public void initSearch() {
         toolbar.setTitle("搜素");
-        everyContentView = layoutInflater.inflate(R.layout.search_content,null,false);
+        everyContentView = layoutInflater.inflate(R.layout.search_content, null, false);
         content.removeAllViews();
         content.addView(everyContentView);
     }
 
     public void initOscar() {
         toolbar.setTitle("奥斯卡");
+        content.removeAllViews();
     }
 
     public void initCollection() {
         toolbar.setTitle("收藏");
+        content.removeAllViews();
     }
 }
