@@ -8,7 +8,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_centerVertical="true"
-        android:padding="3dp">
+        android:padding="3dp"
+        android:id="@+id/linearLayout">
 
         <AutoCompleteTextView
             android:id="@+id/editText"

@@ -35,4 +35,7 @@ public class CommonURL {
     }
 
     public final static String PLAY_URL = "http://www.baofeng.com/play/209/play-";
+    public final static String MOVIE_DETAIL_URL = "http://search.shouji.baofeng.com/mdetail.php?aid=";
+
+    public final static String SEARCH_URL = "http://so.shouji.baofeng.com/search.php?limit=20&offset=0&pay=1&platf=android&mtype=normal&query=";
 }

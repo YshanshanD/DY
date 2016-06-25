@@ -16,7 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,11 @@ public class DyMainActivity extends AppCompatActivity
 
     private LayoutInflater layoutInflater;
 
-    private View everyContentView;
+    private View movieContentView;//电影视图
+
+    private View searchContentView;//搜索视图
+
+    private View oscarContentView;//奥斯卡视图
 
 
     @Override
@@ -136,7 +141,6 @@ public class DyMainActivity extends AppCompatActivity
     public void onListFragmentInteraction(MovieEntity.ResultBean item) {
 
         if (item != null) {
-            Toast.makeText(DyMainActivity.this, "------" + item.getTitle(), Toast.LENGTH_SHORT).show();
             String url = CommonURL.PLAY_URL + item.getMid() + ".html";
             Intent intent = new Intent(DyMainActivity.this, ItemDetailActivity.class);
             intent.putExtra("url", url);
@@ -151,26 +155,31 @@ public class DyMainActivity extends AppCompatActivity
 
         toolbar.setTitle("电影");
 
-        everyContentView = layoutInflater.inflate(R.layout.movie_content, null, false);
 
         content.removeAllViews();
-        content.addView(everyContentView);
 
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
-        titleStrip = (PagerTabStrip) findViewById(R.id.pager_tab_trip);
-        titleStrip.setTabIndicatorColor(getResources().getColor(R.color.customColor));
-        titleStrip.setBackgroundColor(getResources().getColor(R.color.backcolor));
+        if (movieContentView == null) {
+            movieContentView = layoutInflater.inflate(R.layout.movie_content, null, false);
 
-        setSupportActionBar(toolbar);
-        fragmentList = new ArrayList<>();
-        for (int i = 0; i < CommonURL.MOVIE_TITLE.size(); i++) {
-            fragmentList.add(MovieFragment.newInstance(3, i, CommonURL.MOVIE.get(CommonURL.MOVIE_TITLE.get(i))));
+            viewPager = (ViewPager) movieContentView.findViewById(R.id.view_pager);
+            titleStrip = (PagerTabStrip) movieContentView.findViewById(R.id.pager_tab_trip);
+            titleStrip.setTabIndicatorColor(getResources().getColor(R.color.customColor));
+            titleStrip.setBackgroundColor(getResources().getColor(R.color.backcolor));
+
+            titleStrip.setTextSpacing(10);
+
+            setSupportActionBar(toolbar);
+            fragmentList = new ArrayList<>();
+            for (int i = 0; i < CommonURL.MOVIE_TITLE.size(); i++) {
+                fragmentList.add(MovieFragment.newInstance(3, i, CommonURL.MOVIE.get(CommonURL.MOVIE_TITLE.get(i))));
+            }
+            MovieViewPagerAdapter adapter = new MovieViewPagerAdapter(getSupportFragmentManager());
+            adapter.setFragmentList(fragmentList);
+            adapter.setTitleList(CommonURL.MOVIE_TITLE);
+            viewPager.setAdapter(adapter);
         }
-        MovieViewPagerAdapter adapter = new MovieViewPagerAdapter(getSupportFragmentManager());
-        adapter.setFragmentList(fragmentList);
-        adapter.setTitleList(CommonURL.MOVIE_TITLE);
-        viewPager.setAdapter(adapter);
 
+        content.addView(movieContentView);
     }
 
     public void initTv() {
@@ -185,14 +194,28 @@ public class DyMainActivity extends AppCompatActivity
 
     public void initSearch() {
         toolbar.setTitle("搜素");
-        everyContentView = layoutInflater.inflate(R.layout.search_content, null, false);
+
         content.removeAllViews();
-        content.addView(everyContentView);
+        if (searchContentView == null) {
+            searchContentView = layoutInflater.inflate(R.layout.search_content, null, false);
+        }
+        content.addView(searchContentView);
     }
 
     public void initOscar() {
         toolbar.setTitle("奥斯卡");
         content.removeAllViews();
+        if(oscarContentView == null){
+            oscarContentView = layoutInflater.inflate(R.layout.oscar_layout,null,false);
+            Spinner spinner = (Spinner)oscarContentView.findViewById(R.id.spinner);
+            List<String> list = new ArrayList<>();
+            for (int i = 2000; i < 2017; i++) {
+                list.add(String.valueOf(i));
+            }
+            ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item,list);
+            spinner.setAdapter(adapter);
+        }
+        content.addView(oscarContentView);
     }
 
     public void initCollection() {

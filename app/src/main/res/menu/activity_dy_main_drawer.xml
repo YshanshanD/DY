@@ -22,6 +22,7 @@
 
     <item android:title="Custom">
         <menu>
+        <group android:checkableBehavior="single">
             <item
                 android:id="@+id/nav_oscar"
                 android:icon="@drawable/ic_menu_share"
@@ -30,6 +31,7 @@
                 android:id="@+id/nav_collection"
                 android:icon="@drawable/ic_menu_send"
                 android:title="收藏" />
+        </group>
         </menu>
     </item>
 

@@ -95,6 +95,48 @@ public class MovieEntity {
         private List<String> areas_name;
         private List<String> sites;
 
+        protected ResultBean(Parcel in) {
+            id = in.readInt();
+            total = in.readInt();
+            clicks = in.readInt();
+            finish = in.readInt();
+            year = in.readInt();
+            update_time = in.readString();
+            mid = in.readInt();
+            is_pay = in.readInt();
+            status = in.readInt();
+            seqs_count_a = in.readInt();
+            seqs_count_i = in.readInt();
+            seqs_count_w = in.readInt();
+            score = in.readDouble();
+            title = in.readString();
+            type = in.readString();
+            actors = in.readString();
+            cover_url = in.readString();
+            cover_sqr = in.readString();
+            cover_h_url = in.readString();
+            has = in.readString();
+            duration = in.readString();
+            last_seq = in.readString();
+            directors_name = in.createStringArrayList();
+            actors_name = in.createStringArrayList();
+            styles_name = in.createStringArrayList();
+            areas_name = in.createStringArrayList();
+            sites = in.createStringArrayList();
+        }
+
+        public static final Creator<ResultBean> CREATOR = new Creator<ResultBean>() {
+            @Override
+            public ResultBean createFromParcel(Parcel in) {
+                return new ResultBean(in);
+            }
+
+            @Override
+            public ResultBean[] newArray(int size) {
+                return new ResultBean[size];
+            }
+        };
+
         public int getId() {
             return id;
         }
@@ -326,7 +368,33 @@ public class MovieEntity {
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
-
+            dest.writeInt(id);
+            dest.writeInt(total);
+            dest.writeInt(clicks);
+            dest.writeInt(finish);
+            dest.writeInt(year);
+            dest.writeString(update_time);
+            dest.writeInt(mid);
+            dest.writeInt(is_pay);
+            dest.writeInt(status);
+            dest.writeInt(seqs_count_a);
+            dest.writeInt(seqs_count_i);
+            dest.writeInt(seqs_count_w);
+            dest.writeDouble(score);
+            dest.writeString(title);
+            dest.writeString(type);
+            dest.writeString(actors);
+            dest.writeString(cover_url);
+            dest.writeString(cover_sqr);
+            dest.writeString(cover_h_url);
+            dest.writeString(has);
+            dest.writeString(duration);
+            dest.writeString(last_seq);
+            dest.writeStringList(directors_name);
+            dest.writeStringList(actors_name);
+            dest.writeStringList(styles_name);
+            dest.writeStringList(areas_name);
+            dest.writeStringList(sites);
         }
 
         public static class RelevantBean {

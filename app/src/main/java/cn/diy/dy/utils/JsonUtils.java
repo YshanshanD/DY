@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
+import cn.diy.dy.entity.MovieDetailEntity;
 import cn.diy.dy.entity.MovieEntity;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -47,6 +48,35 @@ public class JsonUtils {
                                 String jsonValue = response.body().string();
                                 System.out.println(jsonValue);
                                 MovieEntity entity  = new Gson().fromJson(jsonValue, MovieEntity.class);
+                                subscriber.onNext(entity);
+                            }
+                            subscriber.onCompleted();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    public Observable<MovieDetailEntity> getMovieDetailJson(final String path) {
+        return Observable.create(new Observable.OnSubscribe<MovieDetailEntity>() {
+            @Override
+            public void call(final Subscriber<? super MovieDetailEntity> subscriber) {
+
+                if (!subscriber.isUnsubscribed()) {
+                    Request request = new Request.Builder().url(path).build();
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if(response.isSuccessful()){
+                                String jsonValue = response.body().string();
+                                System.out.println(jsonValue);
+                                MovieDetailEntity entity  = new Gson().fromJson(jsonValue, MovieDetailEntity.class);
                                 subscriber.onNext(entity);
                             }
                             subscriber.onCompleted();
