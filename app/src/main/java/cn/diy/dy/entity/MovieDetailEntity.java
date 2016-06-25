@@ -50,6 +50,7 @@ public class MovieDetailEntity {
     private int ending;
     private String update_tip;
     private SeriesBean series;
+
     private String danmaku;
     private PayInfoBean pay_info;
     private List<String> style_name;
