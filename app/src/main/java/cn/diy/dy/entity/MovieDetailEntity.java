@@ -30,6 +30,7 @@ public class MovieDetailEntity {
     @SerializedName("3d")
     private String value3d;
     private String status;
+
     private String total_score;
     private String update_time;
     private String merge_id;
