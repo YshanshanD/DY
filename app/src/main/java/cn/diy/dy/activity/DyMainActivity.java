@@ -8,15 +8,19 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -49,6 +53,8 @@ public class DyMainActivity extends AppCompatActivity
 
     private View oscarContentView;//奥斯卡视图
 
+    private SwipeRefreshLayout refreshLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +64,21 @@ public class DyMainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         content = (ViewGroup) findViewById(R.id.content);
+
+//        refreshLayout = (SwipeRefreshLayout)findViewById(R.id.refresh_layout);
+//        refreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+//        refreshLayout.setColorSchemeResources(android.R.color.holo_blue_light,android.R.color.holo_green_light);
+//        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                      refreshLayout.setRefreshing(false);
+//                    }
+//                },2000);
+//            }
+//        });
 
         layoutInflater = LayoutInflater.from(this);
 
@@ -155,7 +176,6 @@ public class DyMainActivity extends AppCompatActivity
 
         toolbar.setTitle("电影");
 
-
         content.removeAllViews();
 
         if (movieContentView == null) {
@@ -169,6 +189,7 @@ public class DyMainActivity extends AppCompatActivity
             titleStrip.setTextSpacing(10);
 
             setSupportActionBar(toolbar);
+
             fragmentList = new ArrayList<>();
             for (int i = 0; i < CommonURL.MOVIE_TITLE.size(); i++) {
                 fragmentList.add(MovieFragment.newInstance(3, i, CommonURL.MOVIE.get(CommonURL.MOVIE_TITLE.get(i))));
@@ -197,7 +218,23 @@ public class DyMainActivity extends AppCompatActivity
 
         content.removeAllViews();
         if (searchContentView == null) {
+            Log.i(CommonURL.SEARCH_LOG,"ok");
             searchContentView = layoutInflater.inflate(R.layout.search_content, null, false);
+            final EditText editText = (EditText)searchContentView.findViewById(R.id.editText);
+            ImageButton searchButton = (ImageButton)searchContentView.findViewById(R.id.search_button);
+
+            searchButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String searchText = editText.getText().toString();
+                    String url = CommonURL.SEARCH_URL+searchText;
+                    Log.i(CommonURL.SEARCH_LOG, "seach_url == " + url);
+                    Intent intent=new Intent(DyMainActivity.this,SearchResultActivity.class);
+                    intent.putExtra("Result_Url",url);
+                    startActivity(intent);
+                }
+            });
+
         }
         content.addView(searchContentView);
     }
@@ -206,7 +243,7 @@ public class DyMainActivity extends AppCompatActivity
         toolbar.setTitle("奥斯卡");
         content.removeAllViews();
         if(oscarContentView == null){
-            oscarContentView = layoutInflater.inflate(R.layout.oscar_layout,null,false);
+            oscarContentView = layoutInflater.inflate(R.layout.oscar_content,null,false);
             Spinner spinner = (Spinner)oscarContentView.findViewById(R.id.spinner);
             List<String> list = new ArrayList<>();
             for (int i = 2000; i < 2017; i++) {
@@ -221,5 +258,9 @@ public class DyMainActivity extends AppCompatActivity
     public void initCollection() {
         toolbar.setTitle("收藏");
         content.removeAllViews();
+
+        Intent intent = new Intent(DyMainActivity.this,GuigeActivity.class);
+        startActivity(intent);
+
     }
 }

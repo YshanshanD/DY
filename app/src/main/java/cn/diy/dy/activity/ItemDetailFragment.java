@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,8 @@ public class ItemDetailFragment extends Fragment {
 
     private MovieEntity.ResultBean mItem;
 
+    private CollapsingToolbarLayout appBarLayout;
+
     private JsonUtils utils;
 
     /**
@@ -47,11 +50,10 @@ public class ItemDetailFragment extends Fragment {
         utils = new JsonUtils(getContext());
 
         Activity activity = this.getActivity();
-        CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+        appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
         if (appBarLayout != null) {
             appBarLayout.setTitle(mItem.getTitle());
         }
-
     }
 
     @Override
@@ -69,6 +71,7 @@ public class ItemDetailFragment extends Fragment {
         if (mItem != null) {
             String url = CommonURL.MOVIE_DETAIL_URL + mItem.getId();
 
+            Log.i(CommonURL.MOVIE_LOG, "detail_url == " + url);
             utils.getMovieDetailJson(url).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<MovieDetailEntity>() {
@@ -115,6 +118,7 @@ public class ItemDetailFragment extends Fragment {
                                 clicks.setText(movieDetailEntity.getClicks()+"");
 
                                 desc.setText(movieDetailEntity.getDesc());
+
                             }
                         }
                     });

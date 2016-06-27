@@ -10,8 +10,9 @@ import java.util.Map;
  */
 public class CommonURL {
 
+    public static final String MOVIE_LOG = "MOVIE";
 
-
+public static final String SEARCH_LOG = "SEARCH";//Log的TAG标志 ex Log.i(TAG,message);
 
     public final static Map<String, String> MOVIE = new HashMap<>();
     static{
@@ -35,7 +36,8 @@ public class CommonURL {
     }
 
     public final static String PLAY_URL = "http://www.baofeng.com/play/209/play-";
-    public final static String MOVIE_DETAIL_URL = "http://search.shouji.baofeng.com/mdetail.php?aid=";
+    public final static String MOVIE_DETAIL_URL = "http://search.shouji.baofeng.com/mdetail.php?platf=android&mtype=normal&g=37&ver=6.2.01&td=0&s=5117C8871D4FF2E94B480E186B834C4FAF1908ED&aid=";
 
-    public final static String SEARCH_URL = "http://so.shouji.baofeng.com/search.php?limit=20&offset=0&pay=1&platf=android&mtype=normal&query=";
+
+    public final static String SEARCH_URL = "http://so.shouji.baofeng.com/search.php?limit=20&offset=0&pay=1&platf=android&mtype=normal&g=37&ver=6.2.01&td=0&s=7B8891887466DB8770042EB3508A85AB7E5B80D8&query=";
 }

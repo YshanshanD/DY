@@ -25,7 +25,7 @@
         <activity
             android:name=".activity.ItemListActivity"
             android:label="@string/title_item_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ItemDetailActivity"
             android:label="@string/title_item_detail"
@@ -35,6 +35,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cn.diy.dy.activity.ItemListActivity" />
         </activity>
+        <activity android:name=".activity.SearchResultActivity"></activity>
+        <activity android:name=".activity.GuigeActivity"></activity>
+        <activity android:name=".activity.LoginActivity"></activity>
+        <activity android:name=".activity.RegistActivity"></activity>
+
     </application>
 
 </manifest>

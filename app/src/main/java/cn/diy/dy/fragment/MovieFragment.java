@@ -86,7 +86,6 @@ public class MovieFragment extends Fragment {
 //            recyclerView.setAdapter(new MymovieRecyclerViewAdapter(DummyContent.ITEMS, mListener));
 
 
-//            System.out.println("--------"+fragmentType + "---+---"+jsonPath);
             jsonUtils.getMovieJson(jsonPath).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<MovieEntity>() {
