@@ -11,6 +11,12 @@
         android:layout_alignParentRight="true"
         android:src="@android:drawable/ic_menu_search" />
 
+    <Spinner
+        android:id="@+id/spinner"
+        android:spinnerMode="dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></Spinner>
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

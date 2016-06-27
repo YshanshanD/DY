@@ -220,6 +220,16 @@ public class DyMainActivity extends AppCompatActivity
         if (searchContentView == null) {
             Log.i(CommonURL.SEARCH_LOG,"ok");
             searchContentView = layoutInflater.inflate(R.layout.search_content, null, false);
+
+            final Spinner spinner = (Spinner)searchContentView.findViewById(R.id.spinner);
+
+            List<String> list = new ArrayList<>();
+            list.add("电影");
+            list.add("电视剧");
+            list.add("动漫");
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, list);
+            spinner.setAdapter(arrayAdapter);
+
             final EditText editText = (EditText)searchContentView.findViewById(R.id.editText);
             ImageButton searchButton = (ImageButton)searchContentView.findViewById(R.id.search_button);
 
@@ -231,6 +241,8 @@ public class DyMainActivity extends AppCompatActivity
                     Log.i(CommonURL.SEARCH_LOG, "seach_url == " + url);
                     Intent intent=new Intent(DyMainActivity.this,SearchResultActivity.class);
                     intent.putExtra("Result_Url",url);
+                    intent.putExtra("Search_Mode", spinner.getSelectedItemPosition());
+
                     startActivity(intent);
                 }
             });
