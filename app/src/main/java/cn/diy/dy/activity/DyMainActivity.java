@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -28,9 +29,15 @@ import java.util.List;
 
 import cn.diy.dy.R;
 import cn.diy.dy.adapter.MovieViewPagerAdapter;
+import cn.diy.dy.adapter.SearchResultAdapter;
 import cn.diy.dy.constant.CommonURL;
 import cn.diy.dy.entity.MovieEntity;
+import cn.diy.dy.entity.SearchResultEntity;
 import cn.diy.dy.fragment.MovieFragment;
+import cn.diy.dy.utils.JsonUtils;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class DyMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MovieFragment.OnListFragmentInteractionListener {
@@ -55,6 +62,8 @@ public class DyMainActivity extends AppCompatActivity
 
     private SwipeRefreshLayout refreshLayout;
 
+    private JsonUtils jsonUtils;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +73,7 @@ public class DyMainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         content = (ViewGroup) findViewById(R.id.content);
+        jsonUtils = new JsonUtils(this);
 
 //        refreshLayout = (SwipeRefreshLayout)findViewById(R.id.refresh_layout);
 //        refreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
@@ -83,8 +93,10 @@ public class DyMainActivity extends AppCompatActivity
         layoutInflater = LayoutInflater.from(this);
 
 
-        initMovie();
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        initMovie();
+        initOscar();
+        DrawerLayout
+                drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         if (drawer != null) {
@@ -218,29 +230,29 @@ public class DyMainActivity extends AppCompatActivity
 
         content.removeAllViews();
         if (searchContentView == null) {
-            Log.i(CommonURL.SEARCH_LOG,"ok");
+            Log.i(CommonURL.SEARCH_LOG, "ok");
             searchContentView = layoutInflater.inflate(R.layout.search_content, null, false);
 
-            final Spinner spinner = (Spinner)searchContentView.findViewById(R.id.spinner);
+            final Spinner spinner = (Spinner) searchContentView.findViewById(R.id.spinner);
 
             List<String> list = new ArrayList<>();
-            list.add("电影");
             list.add("电视剧");
+            list.add("电影");
             list.add("动漫");
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, list);
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
             spinner.setAdapter(arrayAdapter);
 
-            final EditText editText = (EditText)searchContentView.findViewById(R.id.editText);
-            ImageButton searchButton = (ImageButton)searchContentView.findViewById(R.id.search_button);
+            final EditText editText = (EditText) searchContentView.findViewById(R.id.editText);
+            ImageButton searchButton = (ImageButton) searchContentView.findViewById(R.id.search_button);
 
             searchButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String searchText = editText.getText().toString();
-                    String url = CommonURL.SEARCH_URL+searchText;
+                    String url = CommonURL.SEARCH_URL + searchText;
                     Log.i(CommonURL.SEARCH_LOG, "seach_url == " + url);
-                    Intent intent=new Intent(DyMainActivity.this,SearchResultActivity.class);
-                    intent.putExtra("Result_Url",url);
+                    Intent intent = new Intent(DyMainActivity.this, SearchResultActivity.class);
+                    intent.putExtra("Result_Url", url);
                     intent.putExtra("Search_Mode", spinner.getSelectedItemPosition());
 
                     startActivity(intent);
@@ -254,15 +266,109 @@ public class DyMainActivity extends AppCompatActivity
     public void initOscar() {
         toolbar.setTitle("奥斯卡");
         content.removeAllViews();
-        if(oscarContentView == null){
-            oscarContentView = layoutInflater.inflate(R.layout.oscar_content,null,false);
-            Spinner spinner = (Spinner)oscarContentView.findViewById(R.id.spinner);
-            List<String> list = new ArrayList<>();
-            for (int i = 2000; i < 2017; i++) {
+        if (oscarContentView == null) {
+            oscarContentView = layoutInflater.inflate(R.layout.oscar_content, null, false);
+            final Spinner spinner = (Spinner) oscarContentView.findViewById(R.id.spinner);
+            final List<String> list = new ArrayList<>();
+            for (int i = 2016; i >= 2011; i--) {
                 list.add(String.valueOf(i));
             }
-            ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item,list);
+            ArrayAdapter adapter = new ArrayAdapter(this, R.layout.custom_spinner_item, R.id.spinner_item, list);
             spinner.setAdapter(adapter);
+
+
+            final ListView listView = (ListView) oscarContentView.findViewById(R.id.oscar_list);
+
+            final SearchResultAdapter adapter1 = new SearchResultAdapter(this, 1);
+            final List<SearchResultEntity.ResultBean> resultBeanList = new ArrayList<>();
+
+            String value = list.get(0)+"";
+            final List<String> movieList = CommonURL.OSCAR_SET.get(value);
+
+            for (int i = 0; i < movieList.size(); i++) {
+                final String movieName = movieList.get(i);
+                String url = CommonURL.SEARCH_URL + movieName;
+                Log.i(CommonURL.OSCAR_LOG, "oscar search url " + movieName+":" + url);
+                jsonUtils.getSearchResultJson(url).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<SearchResultEntity>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onNext(SearchResultEntity searchResultEntity) {
+                                for (SearchResultEntity.ResultBean bean : searchResultEntity.getResult()) {
+                                    if (bean.getType_l().equals("电影") && bean.getTitle().equals(movieName)&&!bean.getCover_url().trim().equals("")) {
+                                        resultBeanList.add(bean);
+                                        Log.i(CommonURL.OSCAR_LOG,"电影名字 == " + bean.getTitle());
+                                        break;
+                                    }
+                                }
+                                Log.i(CommonURL.OSCAR_LOG, "电影总数 == " + resultBeanList.size());
+
+                                adapter1.bindData(resultBeanList);
+                                listView.setAdapter(adapter1);
+                                adapter1.notifyDataSetChanged();
+
+                            }
+                        });
+            }
+
+
+
+
+//            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                @Override
+//                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                    resultBeanList.clear();
+//                    String value = list.get(position);
+//                    final List<String> movieList = CommonURL.OSCAR_SET.get(value);
+//
+//                    for (int i = 0; i < movieList.size(); i++) {
+//                        final String movieName = movieList.get(i);
+//                        String url = CommonURL.SEARCH_URL + movieName;
+//                        jsonUtils.getSearchResultJson(url).subscribeOn(Schedulers.io())
+//                                .observeOn(AndroidSchedulers.mainThread())
+//                                .subscribe(new Subscriber<SearchResultEntity>() {
+//                                    @Override
+//                                    public void onCompleted() {
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onError(Throwable e) {
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onNext(SearchResultEntity searchResultEntity) {
+//                                        for (SearchResultEntity.ResultBean bean : searchResultEntity.getResult()) {
+//                                            if (bean.getType_l().equals("电影") && bean.getTitle().equals(movieName)) {
+//                                                resultBeanList.add(bean);
+//                                                Log.i(CommonURL.OSCAR_LOG,"电影名字 == " + bean.getTitle());
+//                                                break;
+//                                            }
+//                                        }
+//                                        Log.i(CommonURL.OSCAR_LOG, "电影总数 == " + resultBeanList.size());
+//
+//                                    }
+//                                });
+//                    }
+//                }
+//
+//                @Override
+//                public void onNothingSelected(AdapterView<?> parent) {
+//
+//                }
+//            });
+
         }
         content.addView(oscarContentView);
     }
@@ -271,7 +377,7 @@ public class DyMainActivity extends AppCompatActivity
         toolbar.setTitle("收藏");
         content.removeAllViews();
 
-        Intent intent = new Intent(DyMainActivity.this,GuigeActivity.class);
+        Intent intent = new Intent(DyMainActivity.this, GuigeActivity.class);
         startActivity(intent);
 
     }

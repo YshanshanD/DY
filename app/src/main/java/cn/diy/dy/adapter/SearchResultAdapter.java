@@ -69,7 +69,10 @@ public class SearchResultAdapter extends BaseAdapter{
                     viewHolder = (TvViewHolder) convertView.getTag();
                 }
 
-                Picasso.with(context).load(resultBeanList.get(position).getCover_url()).resize(255,342).into(viewHolder.cover);
+
+                if(resultBeanList.get(position) != null){
+                    Picasso.with(context).load(resultBeanList.get(position).getCover_url()).resize(255,342).into(viewHolder.cover);
+                }
 
                 viewHolder.title.setText(resultBeanList.get(position).getTitle());
 
@@ -105,7 +108,7 @@ public class SearchResultAdapter extends BaseAdapter{
                 MovieViewHolder mViewHolder;
                 if(convertView == null){
                     mViewHolder = new MovieViewHolder();
-                    convertView = (View) LayoutInflater.from(context).inflate(R.layout.every_search_movie_layout,parent,false);
+                    convertView = LayoutInflater.from(context).inflate(R.layout.every_search_movie_layout,parent,false);
                     mViewHolder.cover = (ImageView) convertView.findViewById(R.id.cover);
                     mViewHolder.title = (TextView) convertView.findViewById(R.id.title);
                     mViewHolder.actorsName = (TextView) convertView.findViewById(R.id.actors_name);
@@ -116,7 +119,11 @@ public class SearchResultAdapter extends BaseAdapter{
                     mViewHolder = (MovieViewHolder) convertView.getTag();
                 }
 
-                Picasso.with(context).load(resultBeanList.get(position).getCover_url()).resize(255,342).into(mViewHolder.cover);
+                String url = resultBeanList.get(position).getCover_url();
+//                Log.i(CommonURL.OSCAR_LOG, "url == " + url);
+                if(!url.trim().equals("")){
+                    Picasso.with(context).load(url).resize(255,342).into(mViewHolder.cover);
+                }
 
                 mViewHolder.title.setText(resultBeanList.get(position).getTitle());
 

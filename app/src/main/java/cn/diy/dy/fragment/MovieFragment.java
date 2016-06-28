@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.diy.dy.R;
@@ -104,8 +105,14 @@ public class MovieFragment extends Fragment {
                             System.out.println("++++++");
                             if (movieEntity != null) {
                                 List<MovieEntity.ResultBean> list = movieEntity.getResult();
-                                if (list != null && !list.isEmpty()) {
-                                    adapter.bindData(list);
+                                List<MovieEntity.ResultBean> resultBeanlist = new ArrayList<>();
+                                for (MovieEntity.ResultBean bean : list) {
+                                    if(bean.getMid()!= 0){
+                                        resultBeanlist.add(bean);
+                                    }
+                                }
+                                if (resultBeanlist != null && !resultBeanlist.isEmpty()) {
+                                    adapter.bindData(resultBeanlist);
                                     recyclerView.setAdapter(adapter);
                                     adapter.notifyDataSetChanged();
                                 }

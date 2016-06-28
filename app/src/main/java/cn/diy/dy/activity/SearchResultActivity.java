@@ -68,7 +68,7 @@ public class SearchResultActivity extends AppCompatActivity implements ResultIte
 
                                 case 1:
 
-                                    valueMode = "电视剧";
+                                    valueMode = "电影";
                                     break;
                                 case 2:
 
@@ -76,7 +76,7 @@ public class SearchResultActivity extends AppCompatActivity implements ResultIte
                                     break;
                             }
 
-                            SearchResultAdapter adapter = new SearchResultAdapter(SearchResultActivity.this,0);
+                            SearchResultAdapter adapter = new SearchResultAdapter(SearchResultActivity.this,mode);
                             List<SearchResultEntity.ResultBean> resultBeanList = new ArrayList<>();
                             for (int i = 0; i < searchResultEntity.getResult().size(); i++) {
                                 if(searchResultEntity.getResult().get(i).getType_l().equals(valueMode)){
