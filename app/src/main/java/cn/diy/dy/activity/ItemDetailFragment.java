@@ -28,7 +28,6 @@ import rx.schedulers.Schedulers;
 public class ItemDetailFragment extends Fragment {
 
 
-
     private MovieEntity.ResultBean mItem;
 
     private CollapsingToolbarLayout appBarLayout;
@@ -61,12 +60,12 @@ public class ItemDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
 
-        final TextView directorsName = (TextView)rootView.findViewById(R.id.directors_name);
-        final TextView actorsName = (TextView)rootView.findViewById(R.id.actors_name);
-        final TextView styleName = (TextView)rootView.findViewById(R.id.style_name);
-        final TextView updateTime = (TextView)rootView.findViewById(R.id.update_time);
-        final TextView clicks = (TextView)rootView.findViewById(R.id.clicks);
-        final TextView desc = (TextView)rootView.findViewById(R.id.desc);
+        final TextView directorsName = (TextView) rootView.findViewById(R.id.directors_name);
+        final TextView actorsName = (TextView) rootView.findViewById(R.id.actors_name);
+        final TextView styleName = (TextView) rootView.findViewById(R.id.style_name);
+        final TextView updateTime = (TextView) rootView.findViewById(R.id.update_time);
+        final TextView clicks = (TextView) rootView.findViewById(R.id.clicks);
+        final TextView desc = (TextView) rootView.findViewById(R.id.desc);
 
         if (mItem != null) {
             String url = CommonURL.MOVIE_DETAIL_URL + mItem.getId();
@@ -87,35 +86,43 @@ public class ItemDetailFragment extends Fragment {
 
                         @Override
                         public void onNext(MovieDetailEntity movieDetailEntity) {
-                            if(movieDetailEntity != null){
-                                StringBuffer stringBuffer = new StringBuffer();
-                                for (String value:movieDetailEntity.getDirectors_name()) {
+                            if (movieDetailEntity != null) {
+                                StringBuffer stringBuffer = new StringBuffer("");
+//                                Log.i("test1",(movieDetailEntity.getDirectors_name() == null)+"");
+                                for (String value : movieDetailEntity.getDirectors_name()) {
                                     stringBuffer.append(value);
                                     stringBuffer.append("/");
                                 }
-                                stringBuffer.delete(stringBuffer.length()-1,stringBuffer.length());
+//                                Log.i("test1",(movieDetailEntity.getDirectors_name() == null)+"");
+                                if (stringBuffer.length() != 0) {
+                                    stringBuffer.delete(stringBuffer.length() - 1, stringBuffer.length());
+                                    directorsName.setText(stringBuffer.toString());
+                                    stringBuffer.delete(0, stringBuffer.length());
+                                }
+//                                Log.i("test1",(movieDetailEntity.getDirectors_name() == null)+"");
 
-                                directorsName.setText(stringBuffer.toString());
-                                stringBuffer.delete(0,stringBuffer.length());
-                                for(String value:movieDetailEntity.getActors_name()){
+                                Log.i("test1", stringBuffer.toString());
+
+                                for (String value : movieDetailEntity.getActors_name()) {
                                     stringBuffer.append(value);
                                     stringBuffer.append("/");
                                 }
-                                stringBuffer.delete(stringBuffer.length()-1,stringBuffer.length());
-
-                                actorsName.setText(stringBuffer.toString());
-
-                                stringBuffer.delete(0,stringBuffer.length());
-                                for(String value:movieDetailEntity.getStyle_name()){
+                                if (stringBuffer.length() != 0) {
+                                    stringBuffer.delete(stringBuffer.length() - 1, stringBuffer.length());
+                                    actorsName.setText(stringBuffer.toString());
+                                    stringBuffer.delete(0, stringBuffer.length());
+                                }
+                                for (String value : movieDetailEntity.getStyle_name()) {
                                     stringBuffer.append(value);
                                     stringBuffer.append("/");
                                 }
-                                stringBuffer.delete(stringBuffer.length()-1,stringBuffer.length());
+
+                                stringBuffer.delete(stringBuffer.length() - 1, stringBuffer.length());
                                 styleName.setText(stringBuffer.toString());
 
                                 updateTime.setText(movieDetailEntity.getUpdate_time());
 
-                                clicks.setText(movieDetailEntity.getClicks()+"");
+                                clicks.setText(movieDetailEntity.getClicks() + "");
 
                                 desc.setText(movieDetailEntity.getDesc());
 

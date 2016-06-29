@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.diy.dy.R;
@@ -31,6 +32,7 @@ public class MymovieRecyclerViewAdapter extends RecyclerView.Adapter<MymovieRecy
     public MymovieRecyclerViewAdapter(Context context,OnListFragmentInteractionListener mListener) {
         this.context = context;
         this.mListener = mListener;
+        resultBeanList = new ArrayList<>();
         mValues = null;
     }
 

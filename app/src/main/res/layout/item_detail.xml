@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="123" />
+            android:text="无" />
     </TableRow>
 
     <TableRow
@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="123" />
+            android:text="无" />
     </TableRow>
 
     <TableRow
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="123" />
+            android:text="无" />
     </TableRow>
 
     <TableRow
@@ -68,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="123" />
+            android:text="无" />
     </TableRow>
 
     <TableRow
@@ -90,7 +90,7 @@
         android:id="@+id/desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="text"/>
+        android:text="无"/>
 
 
 </LinearLayout>

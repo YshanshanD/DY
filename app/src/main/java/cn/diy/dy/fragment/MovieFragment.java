@@ -29,11 +29,18 @@ import rx.schedulers.Schedulers;
 public class MovieFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
-    private static final String FRAGEMENT_TYPE = "fragment-type";
+    public static final String FRAGEMENT_TYPE = "fragment-type";
     private static final String JSON_PATH = "json-path";
     // TODO: Customize parameters
     private int mColumnCount = 3;
     private int fragmentType = 1;
+
+    private OnListFragmentInteractionListener listFragmentInteractionListener;
+
+    public int getFragmentType() {
+        return fragmentType;
+    }
+
     private String jsonPath = "";
     private OnListFragmentInteractionListener mListener;
 
@@ -102,14 +109,13 @@ public class MovieFragment extends Fragment {
 
                         @Override
                         public void onNext(MovieEntity movieEntity) {
-                            System.out.println("++++++");
+//                            System.out.println("++++++");
                             if (movieEntity != null) {
                                 List<MovieEntity.ResultBean> list = movieEntity.getResult();
                                 List<MovieEntity.ResultBean> resultBeanlist = new ArrayList<>();
                                 for (MovieEntity.ResultBean bean : list) {
-                                    if(bean.getMid()!= 0){
                                         resultBeanlist.add(bean);
-                                    }
+
                                 }
                                 if (resultBeanlist != null && !resultBeanlist.isEmpty()) {
                                     adapter.bindData(resultBeanlist);
@@ -117,12 +123,11 @@ public class MovieFragment extends Fragment {
                                     adapter.notifyDataSetChanged();
                                 }
                             }
+                            listFragmentInteractionListener.onComplete(fragmentType);
                         }
                     });
 
         }
-
-
 
         return view;
     }
@@ -157,5 +162,6 @@ public class MovieFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(MovieEntity.ResultBean item);
+        void onComplete(int fragementType);
     }
 }

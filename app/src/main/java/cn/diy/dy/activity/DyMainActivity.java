@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -46,7 +47,11 @@ public class DyMainActivity extends AppCompatActivity
 
     private PagerTabStrip titleStrip;//滚动框架标题分类
 
-    private List<Fragment> fragmentList;
+    private List<Fragment> fragmentMovieList;
+
+    private List<Fragment> fragmentTvList;
+
+    private List<Fragment> fragmentAnimaList;
 
     private Toolbar toolbar;
 
@@ -63,6 +68,8 @@ public class DyMainActivity extends AppCompatActivity
     private SwipeRefreshLayout refreshLayout;
 
     private JsonUtils jsonUtils;
+
+    private MovieViewPagerAdapter adapter;
 
 
     @Override
@@ -92,9 +99,19 @@ public class DyMainActivity extends AppCompatActivity
 
         layoutInflater = LayoutInflater.from(this);
 
+        movieContentView = layoutInflater.inflate(R.layout.movie_content, content, false);
+        viewPager = (ViewPager) movieContentView.findViewById(R.id.view_pager);
+        titleStrip = (PagerTabStrip) movieContentView.findViewById(R.id.pager_tab_trip);
+        titleStrip.setTabIndicatorColor(getResources().getColor(R.color.customColor));
+        titleStrip.setBackgroundColor(getResources().getColor(R.color.backcolor));
+
+        adapter = new MovieViewPagerAdapter(getSupportFragmentManager());
+        initList();
 
 //        initMovie();
-        initOscar();
+//        initTv();
+        initAnime();
+//        initOscar();
         DrawerLayout
                 drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -108,6 +125,29 @@ public class DyMainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         navigationView.setCheckedItem(R.id.nav_movie);
+    }
+
+    private void initList() {
+        fragmentMovieList = new ArrayList<>();
+        for (int i = 0; i < CommonURL.MOVIE_TITLE.size(); i++) {
+            String url = CommonURL.MOVIE.get(CommonURL.MOVIE_TITLE.get(i));
+            fragmentMovieList.add(MovieFragment.newInstance(3, 0, url));
+//            Log.i("fragmentlist",url);
+        }
+
+        fragmentTvList = new ArrayList<>();
+        for (int i = 0; i < CommonURL.TV_TITLE.size(); i++) {
+            String url = CommonURL.TV.get(CommonURL.TV_TITLE.get(i));
+            fragmentTvList.add(MovieFragment.newInstance(3, 1, url));
+//            Log.i("fragmentlist",url);
+        }
+
+        fragmentAnimaList = new ArrayList<>();
+        for (int i = 0; i < CommonURL.ANIMA_TITLE.size(); i++) {
+            String url = CommonURL.ANIMA.get(CommonURL.ANIMA_TITLE.get(i));
+            fragmentAnimaList.add(MovieFragment.newInstance(3, 2, url));
+//            Log.i("fragmentlist",url);
+        }
     }
 
     @Override
@@ -134,10 +174,6 @@ public class DyMainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -152,8 +188,6 @@ public class DyMainActivity extends AppCompatActivity
             initMovie();
         } else if (id == R.id.nav_tv) {
             initTv();
-
-
         } else if (id == R.id.nav_anime) {
             initAnime();
         } else if (id == R.id.nav_search) {
@@ -177,6 +211,7 @@ public class DyMainActivity extends AppCompatActivity
             String url = CommonURL.PLAY_URL + item.getMid() + ".html";
             Intent intent = new Intent(DyMainActivity.this, ItemDetailActivity.class);
             intent.putExtra("url", url);
+            intent.putExtra("mid", item.getMid());
             Bundle bundle = new Bundle();
             bundle.putParcelable("item", item);
             intent.putExtras(bundle);
@@ -184,49 +219,86 @@ public class DyMainActivity extends AppCompatActivity
         }
     }
 
-    public void initMovie() {
+    @Override
+    public void onComplete(int fragementType) {
+        switch (fragementType){
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+        }
+    }
 
+    public void initMovie() {
         toolbar.setTitle("电影");
+        setSupportActionBar(toolbar);
 
         content.removeAllViews();
-
-        if (movieContentView == null) {
-            movieContentView = layoutInflater.inflate(R.layout.movie_content, null, false);
-
-            viewPager = (ViewPager) movieContentView.findViewById(R.id.view_pager);
-            titleStrip = (PagerTabStrip) movieContentView.findViewById(R.id.pager_tab_trip);
-            titleStrip.setTabIndicatorColor(getResources().getColor(R.color.customColor));
-            titleStrip.setBackgroundColor(getResources().getColor(R.color.backcolor));
-
-            titleStrip.setTextSpacing(10);
-
-            setSupportActionBar(toolbar);
-
-            fragmentList = new ArrayList<>();
+        if (fragmentMovieList == null) {
+            fragmentMovieList = new ArrayList<>();
             for (int i = 0; i < CommonURL.MOVIE_TITLE.size(); i++) {
-                fragmentList.add(MovieFragment.newInstance(3, i, CommonURL.MOVIE.get(CommonURL.MOVIE_TITLE.get(i))));
+                String url = CommonURL.MOVIE.get(CommonURL.MOVIE_TITLE.get(i));
+                fragmentMovieList.add(MovieFragment.newInstance(3, 0, url));
+                Log.i("fragmentlist",url);
             }
-            MovieViewPagerAdapter adapter = new MovieViewPagerAdapter(getSupportFragmentManager());
-            adapter.setFragmentList(fragmentList);
-            adapter.setTitleList(CommonURL.MOVIE_TITLE);
-            viewPager.setAdapter(adapter);
         }
 
+//        adapter.setFragmentList(fragmentMovieList);
+        adapter.setFragments(fragmentMovieList);
+        adapter.setTitleList(CommonURL.MOVIE_TITLE);
+        viewPager.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
         content.addView(movieContentView);
     }
 
     public void initTv() {
         toolbar.setTitle("电视剧");
+        setSupportActionBar(toolbar);
+
         content.removeAllViews();
+        if (fragmentTvList == null) {
+            fragmentTvList = new ArrayList<>();
+            for (int i = 0; i < CommonURL.TV_TITLE.size(); i++) {
+                String url = CommonURL.TV.get(CommonURL.TV_TITLE.get(i));
+                fragmentTvList.add(MovieFragment.newInstance(3, 1, url));
+                Log.i("fragmentlist",url);
+            }
+        }
+
+//        adapter.setFragmentList(fragmentTvList);
+        adapter.setFragments(fragmentTvList);
+        adapter.setTitleList(CommonURL.TV_TITLE);
+        viewPager.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
+        content.addView(movieContentView);
     }
 
     public void initAnime() {
         toolbar.setTitle("动漫");
+        setSupportActionBar(toolbar);
         content.removeAllViews();
+        if (fragmentAnimaList == null) {
+            fragmentAnimaList = new ArrayList<>();
+            for (int i = 0; i < CommonURL.ANIMA_TITLE.size(); i++) {
+                String url = CommonURL.ANIMA.get(CommonURL.ANIMA_TITLE.get(i));
+                fragmentAnimaList.add(MovieFragment.newInstance(3, 2, url));
+                Log.i("fragmentlist",url);
+            }
+        }
+
+
+//        adapter.setFragmentList(fragmentAnimaList);
+        adapter.setFragments(fragmentAnimaList);
+        adapter.setTitleList(CommonURL.ANIMA_TITLE);
+        viewPager.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
+        content.addView(movieContentView);
     }
 
     public void initSearch() {
-        toolbar.setTitle("搜素");
+        toolbar.setTitle("搜索");
 
         content.removeAllViews();
         if (searchContentView == null) {
@@ -270,7 +342,7 @@ public class DyMainActivity extends AppCompatActivity
             oscarContentView = layoutInflater.inflate(R.layout.oscar_content, null, false);
             final Spinner spinner = (Spinner) oscarContentView.findViewById(R.id.spinner);
             final List<String> list = new ArrayList<>();
-            for (int i = 2016; i >= 2011; i--) {
+            for (int i = 2015; i >= 2011; i--) {
                 list.add(String.valueOf(i));
             }
             ArrayAdapter adapter = new ArrayAdapter(this, R.layout.custom_spinner_item, R.id.spinner_item, list);
@@ -282,92 +354,53 @@ public class DyMainActivity extends AppCompatActivity
             final SearchResultAdapter adapter1 = new SearchResultAdapter(this, 1);
             final List<SearchResultEntity.ResultBean> resultBeanList = new ArrayList<>();
 
-            String value = list.get(0)+"";
-            final List<String> movieList = CommonURL.OSCAR_SET.get(value);
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    resultBeanList.clear();
+                    String value = list.get(position);
+                    final List<String> movieList = CommonURL.OSCAR_SET.get(value);
 
-            for (int i = 0; i < movieList.size(); i++) {
-                final String movieName = movieList.get(i);
-                String url = CommonURL.SEARCH_URL + movieName;
-                Log.i(CommonURL.OSCAR_LOG, "oscar search url " + movieName+":" + url);
-                jsonUtils.getSearchResultJson(url).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<SearchResultEntity>() {
-                            @Override
-                            public void onCompleted() {
+                    for (int i = 0; i < movieList.size(); i++) {
+                        final String movieName = movieList.get(i);
+                        String url = CommonURL.SEARCH_URL + movieName;
+                        jsonUtils.getSearchResultJson(url).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Subscriber<SearchResultEntity>() {
+                                    @Override
+                                    public void onCompleted() {
 
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-
-                            }
-
-                            @Override
-                            public void onNext(SearchResultEntity searchResultEntity) {
-                                for (SearchResultEntity.ResultBean bean : searchResultEntity.getResult()) {
-                                    if (bean.getType_l().equals("电影") && bean.getTitle().equals(movieName)&&!bean.getCover_url().trim().equals("")) {
-                                        resultBeanList.add(bean);
-                                        Log.i(CommonURL.OSCAR_LOG,"电影名字 == " + bean.getTitle());
-                                        break;
                                     }
-                                }
-                                Log.i(CommonURL.OSCAR_LOG, "电影总数 == " + resultBeanList.size());
 
-                                adapter1.bindData(resultBeanList);
-                                listView.setAdapter(adapter1);
-                                adapter1.notifyDataSetChanged();
+                                    @Override
+                                    public void onError(Throwable e) {
 
-                            }
-                        });
-            }
+                                    }
 
+                                    @Override
+                                    public void onNext(SearchResultEntity searchResultEntity) {
+                                        for (SearchResultEntity.ResultBean bean : searchResultEntity.getResult()) {
+                                            if (bean.getType_l().equals("电影") && bean.getTitle().equals(movieName) && !bean.getCover_url().trim().equals("")) {
+                                                resultBeanList.add(bean);
+                                                Log.i(CommonURL.OSCAR_LOG, "电影名字 == " + bean.getTitle());
+                                                break;
+                                            }
+                                        }
+                                        adapter1.bindData(resultBeanList);
+                                        listView.setAdapter(adapter1);
+                                        adapter1.notifyDataSetChanged();
+                                        Log.i(CommonURL.OSCAR_LOG, "电影总数 == " + resultBeanList.size());
 
+                                    }
+                                });
+                    }
+                }
 
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-//            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                @Override
-//                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                    resultBeanList.clear();
-//                    String value = list.get(position);
-//                    final List<String> movieList = CommonURL.OSCAR_SET.get(value);
-//
-//                    for (int i = 0; i < movieList.size(); i++) {
-//                        final String movieName = movieList.get(i);
-//                        String url = CommonURL.SEARCH_URL + movieName;
-//                        jsonUtils.getSearchResultJson(url).subscribeOn(Schedulers.io())
-//                                .observeOn(AndroidSchedulers.mainThread())
-//                                .subscribe(new Subscriber<SearchResultEntity>() {
-//                                    @Override
-//                                    public void onCompleted() {
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onError(Throwable e) {
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onNext(SearchResultEntity searchResultEntity) {
-//                                        for (SearchResultEntity.ResultBean bean : searchResultEntity.getResult()) {
-//                                            if (bean.getType_l().equals("电影") && bean.getTitle().equals(movieName)) {
-//                                                resultBeanList.add(bean);
-//                                                Log.i(CommonURL.OSCAR_LOG,"电影名字 == " + bean.getTitle());
-//                                                break;
-//                                            }
-//                                        }
-//                                        Log.i(CommonURL.OSCAR_LOG, "电影总数 == " + resultBeanList.size());
-//
-//                                    }
-//                                });
-//                    }
-//                }
-//
-//                @Override
-//                public void onNothingSelected(AdapterView<?> parent) {
-//
-//                }
-//            });
+                }
+            });
 
         }
         content.addView(oscarContentView);

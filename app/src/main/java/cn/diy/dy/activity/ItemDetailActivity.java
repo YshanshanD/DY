@@ -6,8 +6,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import cn.diy.dy.R;
 
@@ -56,12 +58,22 @@ public class ItemDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ItemDetailActivity.this, PlayActivity.class);
-                intent.putExtra("url",getIntent().getStringExtra("url"));
-                startActivity(intent);
-                finish();
+                if(getIntent().getIntExtra("mid",-1) <= 0){
+                    Toast.makeText(ItemDetailActivity.this, "资源不存在", Toast.LENGTH_SHORT).show();
+                }else {
+                    Intent intent = new Intent(ItemDetailActivity.this, PlayActivity.class);
+                    intent.putExtra("url", getIntent().getStringExtra("url"));
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_dy_main_drawer,menu);
+        return true;
     }
 
     @Override

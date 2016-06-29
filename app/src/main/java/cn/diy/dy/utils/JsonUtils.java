@@ -36,7 +36,7 @@ public class JsonUtils {
         return Observable.create(new Observable.OnSubscribe<MovieEntity>() {
             @Override
             public void call(final Subscriber<? super MovieEntity> subscriber) {
-                Log.i(CommonURL.MOVIE_LOG, "ok");
+                Log.e(CommonURL.MOVIE_LOG, "ok==" +path);
                 if (!subscriber.isUnsubscribed()) {
                     Request request = new Request.Builder().url(path).build();
                     client.newCall(request).enqueue(new Callback() {

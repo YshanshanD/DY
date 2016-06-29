@@ -1,6 +1,7 @@
 package cn.diy.dy.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import cn.diy.dy.R;
+import cn.diy.dy.activity.PlayActivity;
+import cn.diy.dy.constant.CommonURL;
 import cn.diy.dy.entity.SearchResultEntity;
 
 /**
@@ -50,7 +53,7 @@ public class SearchResultAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         switch(mode){
             case 0:
@@ -76,7 +79,7 @@ public class SearchResultAdapter extends BaseAdapter{
 
                 viewHolder.title.setText(resultBeanList.get(position).getTitle());
 
-                StringBuffer string = new StringBuffer();
+                final StringBuffer string = new StringBuffer();
                 for(String value:resultBeanList.get(position).getActors_name()){
                     string.append(value);
                     string.append("/");
@@ -147,7 +150,10 @@ public class SearchResultAdapter extends BaseAdapter{
                 mViewHolder.more.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        Intent intent=new Intent(context, PlayActivity.class);
+                        String url= CommonURL.PLAY_URL+resultBeanList.get(position).getMid()+".html";
+                        intent.putExtra("url",url);
+                        context.startActivity(intent);
                     }
                 });
 
