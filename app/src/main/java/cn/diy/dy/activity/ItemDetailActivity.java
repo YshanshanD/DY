@@ -132,6 +132,7 @@ public class ItemDetailActivity extends AppCompatActivity {
                 ps.add(CurrentUser.user);
                 String valueString = new Gson().toJson(ps);
                 storageUtils.writeFileToInternal("use_info",valueString.getBytes());
+                Toast.makeText(ItemDetailActivity.this, "收藏成功", Toast.LENGTH_SHORT).show();
             }
         }
         return super.onOptionsItemSelected(item);

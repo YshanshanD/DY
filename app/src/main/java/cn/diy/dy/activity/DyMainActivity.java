@@ -202,12 +202,20 @@ public class DyMainActivity extends AppCompatActivity
             initOscar();
         } else if (id == R.id.nav_collection) {
             initCollection();
+        } else if(id ==R.id.nav_quit){
+            dealQuit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 //        System.out.println("choose 0f id == " + item.getTitle());
         return true;
+    }
+
+    private void dealQuit() {
+        CurrentUser.LoginFlag = false;
+        Intent intent = new Intent(DyMainActivity.this, GuigeActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -431,10 +439,6 @@ public class DyMainActivity extends AppCompatActivity
                 for (String value : CurrentUser.user.getTitleList()) {
                     list.add(value);
                 }
-            List<String> strings = new ArrayList<>();
-            strings.add("111");
-            strings.add("222");
-            strings.add("333");
                 ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
                 listView.setAdapter(arrayAdapter);
                 arrayAdapter.notifyDataSetChanged();
