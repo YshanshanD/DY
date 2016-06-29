@@ -11,7 +11,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.List;
+
 import cn.diy.dy.R;
+import cn.diy.dy.entity.CurrentUser;
+import cn.diy.dy.entity.MovieEntity;
+import cn.diy.dy.entity.User;
+import cn.diy.dy.utils.StorageUtils;
 
 /**
  * An activity representing a single Item detail screen. This
@@ -21,12 +30,17 @@ import cn.diy.dy.R;
  */
 public class ItemDetailActivity extends AppCompatActivity {
 
+    private String title;
+    private String url;
+    private StorageUtils storageUtils;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
+        storageUtils = new StorageUtils(this);
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -47,6 +61,9 @@ public class ItemDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = getIntent().getExtras();
+            url = arguments.getString("url");
+            MovieEntity.ResultBean bean = arguments.getParcelable("item");
+            title = bean.getTitle();
             ItemDetailFragment fragment = new ItemDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -58,9 +75,9 @@ public class ItemDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getIntent().getIntExtra("mid",-1) <= 0){
+                if (getIntent().getIntExtra("mid", -1) <= 0) {
                     Toast.makeText(ItemDetailActivity.this, "资源不存在", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     Intent intent = new Intent(ItemDetailActivity.this, PlayActivity.class);
                     intent.putExtra("url", getIntent().getStringExtra("url"));
                     startActivity(intent);
@@ -72,7 +89,7 @@ public class ItemDetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_dy_main_drawer,menu);
+        getMenuInflater().inflate(R.menu.share_item_activity_menu, menu);
         return true;
     }
 
@@ -88,6 +105,34 @@ public class ItemDetailActivity extends AppCompatActivity {
             //
             navigateUpTo(new Intent(this, ItemListActivity.class));
             return true;
+        }
+        if (id == R.id.action_share) {
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "this movie is pretty good, I want to share it to you" + url);
+            shareIntent.setType("text/plain");
+            startActivity(shareIntent.createChooser(shareIntent, "分享到"));
+        }
+        if (id == R.id.action_collection) {
+            if (!CurrentUser.LoginFlag) {
+                Intent intent = new Intent(ItemDetailActivity.this, GuigeActivity.class);
+                startActivity(intent);
+            } else {
+                CurrentUser.user.getTitleList().add(title);
+                User user = null;
+                String value = new String(storageUtils.readFileFromInternal("use_info"));
+                List<User> ps = new Gson().fromJson(value, new TypeToken<List<User>>() {}.getType());
+                for(User bean:ps){
+                    if(bean.getName().equals(CurrentUser.user.getName())){
+                        user = bean;
+                        continue;
+                    }
+                }
+                ps.remove(user);
+                ps.add(CurrentUser.user);
+                String valueString = new Gson().toJson(ps);
+                storageUtils.writeFileToInternal("use_info",valueString.getBytes());
+            }
         }
         return super.onOptionsItemSelected(item);
     }

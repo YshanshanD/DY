@@ -1,6 +1,7 @@
 package cn.diy.dy.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,16 +34,18 @@ import cn.diy.dy.R;
 import cn.diy.dy.adapter.MovieViewPagerAdapter;
 import cn.diy.dy.adapter.SearchResultAdapter;
 import cn.diy.dy.constant.CommonURL;
+import cn.diy.dy.entity.CurrentUser;
 import cn.diy.dy.entity.MovieEntity;
 import cn.diy.dy.entity.SearchResultEntity;
 import cn.diy.dy.fragment.MovieFragment;
+import cn.diy.dy.fragment.ResultItemFragment;
 import cn.diy.dy.utils.JsonUtils;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class DyMainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MovieFragment.OnListFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, MovieFragment.OnListFragmentInteractionListener, ResultItemFragment.OnFragmentInteractionListener {
 
     private ViewPager viewPager;//滚动框架
 
@@ -64,6 +68,8 @@ public class DyMainActivity extends AppCompatActivity
     private View searchContentView;//搜索视图
 
     private View oscarContentView;//奥斯卡视图
+
+    private View collectionContentView;
 
     private SwipeRefreshLayout refreshLayout;
 
@@ -124,7 +130,7 @@ public class DyMainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        navigationView.setCheckedItem(R.id.nav_movie);
+        navigationView.setCheckedItem(R.id.nav_anime);
     }
 
     private void initList() {
@@ -221,7 +227,7 @@ public class DyMainActivity extends AppCompatActivity
 
     @Override
     public void onComplete(int fragementType) {
-        switch (fragementType){
+        switch (fragementType) {
             case 0:
                 break;
             case 1:
@@ -241,7 +247,7 @@ public class DyMainActivity extends AppCompatActivity
             for (int i = 0; i < CommonURL.MOVIE_TITLE.size(); i++) {
                 String url = CommonURL.MOVIE.get(CommonURL.MOVIE_TITLE.get(i));
                 fragmentMovieList.add(MovieFragment.newInstance(3, 0, url));
-                Log.i("fragmentlist",url);
+                Log.i("fragmentlist", url);
             }
         }
 
@@ -263,7 +269,7 @@ public class DyMainActivity extends AppCompatActivity
             for (int i = 0; i < CommonURL.TV_TITLE.size(); i++) {
                 String url = CommonURL.TV.get(CommonURL.TV_TITLE.get(i));
                 fragmentTvList.add(MovieFragment.newInstance(3, 1, url));
-                Log.i("fragmentlist",url);
+                Log.i("fragmentlist", url);
             }
         }
 
@@ -284,7 +290,7 @@ public class DyMainActivity extends AppCompatActivity
             for (int i = 0; i < CommonURL.ANIMA_TITLE.size(); i++) {
                 String url = CommonURL.ANIMA.get(CommonURL.ANIMA_TITLE.get(i));
                 fragmentAnimaList.add(MovieFragment.newInstance(3, 2, url));
-                Log.i("fragmentlist",url);
+                Log.i("fragmentlist", url);
             }
         }
 
@@ -351,7 +357,7 @@ public class DyMainActivity extends AppCompatActivity
 
             final ListView listView = (ListView) oscarContentView.findViewById(R.id.oscar_list);
 
-            final SearchResultAdapter adapter1 = new SearchResultAdapter(this, 1);
+            final SearchResultAdapter adapter1 = new SearchResultAdapter(this, 1, this);
             final List<SearchResultEntity.ResultBean> resultBeanList = new ArrayList<>();
 
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -410,8 +416,36 @@ public class DyMainActivity extends AppCompatActivity
         toolbar.setTitle("收藏");
         content.removeAllViews();
 
-        Intent intent = new Intent(DyMainActivity.this, GuigeActivity.class);
-        startActivity(intent);
+        if (CurrentUser.LoginFlag == false) {
+            Intent intent = new Intent(DyMainActivity.this, GuigeActivity.class);
+            startActivity(intent);
+        } else {
+            if (collectionContentView == null) {
+                collectionContentView = layoutInflater.inflate(R.layout.collection_content, null, false);
+            }
+                final TextView userView = (TextView) collectionContentView.findViewById(R.id.user_name);
+                final ListView listView = (ListView) collectionContentView.findViewById(R.id.list_view);
+                userView.setText(CurrentUser.user.getName());
+                Log.e("test5",CurrentUser.user.getName());
+                List<String> list = new ArrayList<>();
+                for (String value : CurrentUser.user.getTitleList()) {
+                    list.add(value);
+                }
+            List<String> strings = new ArrayList<>();
+            strings.add("111");
+            strings.add("222");
+            strings.add("333");
+                ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
+                listView.setAdapter(arrayAdapter);
+                arrayAdapter.notifyDataSetChanged();
+
+            content.addView(collectionContentView);
+        }
+
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
     }
 }

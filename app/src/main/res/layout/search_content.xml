@@ -13,13 +13,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:src="@android:drawable/ic_menu_search" />
+        android:layout_centerVertical="true"
+        android:paddingTop="10dp"
+        android:src="@android:drawable/ic_menu_search"
+        android:background="@color/backcolor"/>
 
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         style="android.R.preference_category"
         android:layout_alignBottom="@id/search_button"
         android:spinnerMode="dropdown"></Spinner>
@@ -31,8 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/search_button"
         android:layout_toRightOf="@id/spinner"
+        android:paddingTop="5dp"
         android:layout_toLeftOf="@id/search_button" />
-
-
 </RelativeLayout>
 

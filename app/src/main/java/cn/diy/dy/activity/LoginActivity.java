@@ -3,13 +3,21 @@ package cn.diy.dy.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.List;
+
 import cn.diy.dy.R;
+import cn.diy.dy.entity.CurrentUser;
+import cn.diy.dy.entity.User;
 import cn.diy.dy.utils.StorageUtils;
 
 public class LoginActivity extends AppCompatActivity {
@@ -45,14 +53,33 @@ public class LoginActivity extends AppCompatActivity {
                 int flag = -1;
                 if ((flag = judgeAccount()) == CORRECT) {
 
-                    String value = new String(storageUtils.readFileFromInternal("user_info"));
-                    String list[] = value.split("@");
-
-                    String username = list[0];
-                    String password = list[1];
-                    if (!username.equals(count.getText().toString())) {
+                    String value = new String(storageUtils.readFileFromInternal("use_info"));
+                    Log.i("test5", "read json == " + value);
+                    List<User> ps = new Gson().fromJson(value, new TypeToken<List<User>>() {
+                    }.getType());
+                    Log.i("test5", "json size == " + ps.size());
+                    String username = count.getText().toString();
+                    String password = psd.getText().toString();
+                    boolean isExitUser = true;
+                    boolean isCorrectPsw = false;
+                    for (User bean : ps) {
+                        if (bean.getName() == username) {
+                            isExitUser = false;
+                        }
+                    }
+                    if (isExitUser) {
+                        for (User bean : ps) {
+                            if (bean.getName().equals(username) && bean.getPassWord().equals(password)) {
+                                isCorrectPsw = true;
+                                CurrentUser.user = bean;
+                                CurrentUser.LoginFlag = true;
+                                continue;
+                            }
+                        }
+                    }
+                    if (!isExitUser) {
                         Toast.makeText(LoginActivity.this, "用户名不存在", Toast.LENGTH_SHORT).show();
-                    } else if (!password.equals(psd.getText().toString())) {
+                    } else if (!isCorrectPsw) {
                         Toast.makeText(LoginActivity.this, "密码错误", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();

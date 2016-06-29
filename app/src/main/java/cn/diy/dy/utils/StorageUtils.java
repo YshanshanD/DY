@@ -57,12 +57,14 @@ public class StorageUtils {
         } catch (FileNotFoundException e) {
             return " ".getBytes();
         } catch (IOException e) {
-            e.printStackTrace();
+            return " ".getBytes();
         } finally {
             try {
-                inputStream.close();
+                if(inputStream!=null){
+                    inputStream.close();
+                }
             } catch (IOException e) {
-                e.printStackTrace();
+                return " ".getBytes();
             }
         }
         return byteArrayOutputStream.toByteArray();

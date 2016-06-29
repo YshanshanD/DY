@@ -51,6 +51,7 @@ public class JsonUtils {
                                 String jsonValue = response.body().string();
                                 Log.i(CommonURL.MOVIE_LOG, "json_value == " + jsonValue);
                                 MovieEntity entity  = new Gson().fromJson(jsonValue, MovieEntity.class);
+
                                 subscriber.onNext(entity);
                             }
                             subscriber.onCompleted();

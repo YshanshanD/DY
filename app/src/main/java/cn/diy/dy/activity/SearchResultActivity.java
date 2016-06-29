@@ -76,10 +76,10 @@ public class SearchResultActivity extends AppCompatActivity implements ResultIte
                                     break;
                             }
 
-                            SearchResultAdapter adapter = new SearchResultAdapter(SearchResultActivity.this,mode);
+                            SearchResultAdapter adapter = new SearchResultAdapter(SearchResultActivity.this,mode,SearchResultActivity.this);
                             List<SearchResultEntity.ResultBean> resultBeanList = new ArrayList<>();
                             for (int i = 0; i < searchResultEntity.getResult().size(); i++) {
-                                if(searchResultEntity.getResult().get(i).getType_l().equals(valueMode)){
+                                if(searchResultEntity.getResult().get(i).getType_l().equals(valueMode)&&!searchResultEntity.getResult().get(i).getCover_url().equals("")){
                                     resultBeanList.add(searchResultEntity.getResult().get(i));
                                 }
                             }
@@ -87,7 +87,6 @@ public class SearchResultActivity extends AppCompatActivity implements ResultIte
                             adapter.bindData(resultBeanList);
                             listView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
-
                         }
                     }
                 });
@@ -96,6 +95,7 @@ public class SearchResultActivity extends AppCompatActivity implements ResultIte
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        String value;
+
+
     }
 }

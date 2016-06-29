@@ -3,12 +3,20 @@ package cn.diy.dy.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.diy.dy.R;
+import cn.diy.dy.entity.User;
 import cn.diy.dy.utils.StorageUtils;
 
 public class RegistActivity extends AppCompatActivity {
@@ -28,6 +36,7 @@ public class RegistActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_regist);
 
+
         storageUtils = new StorageUtils(this);
 
         button = (Button) this.findViewById(R.id.button);
@@ -40,13 +49,39 @@ public class RegistActivity extends AppCompatActivity {
                 int flag = -1;
                 if ((flag = judgeAccount()) == CORRECT) {
 
-                    String string = count.getText().toString() + "@" + psd.getText().toString();
+//                    String string = count.getText().toString() + "@" + psd.getText().toString();
 
-                    storageUtils.writeFileToInternal("user_info",string.getBytes());
+                    String readValue = new String(storageUtils.readFileFromInternal("use_info"));
+                    User user = new User();
+                    user.setName(count.getText().toString());
+                    user.setPassWord(psd.getText().toString());
+                    user.setTitleList(new ArrayList<String>());
+                    List<User> ps = new Gson().fromJson(readValue, new TypeToken<List<User>>(){}.getType());
+                    boolean isNotExitUser = true;
+                    try {
+                        for (User bean :ps) {
+                            if(bean.getName().equals(user.getName())){
+                                isNotExitUser = false;
 
-                    Intent intent = new Intent(RegistActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                                continue;
+                            }
+                        }
+                    } catch (NullPointerException e) {
+                        ps = new ArrayList<User>();
+                    }
+                    if(isNotExitUser){
+                        ps.add(user);
+                        String value = new Gson().toJson(ps);
+                        Log.i("test5",value);
+                        storageUtils.writeFileToInternal("use_info",value.getBytes());
+                        Intent intent = new Intent(RegistActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }else{
+                        Log.i("test5","count is exit");
+                        Toast.makeText(RegistActivity.this, "count is exit", Toast.LENGTH_SHORT).show();
+                    }
+
                 } else {
                     if (flag == ACCOUTN_WRONG) {
                         Toast.makeText(RegistActivity.this, "count is wrong", Toast.LENGTH_SHORT).show();
