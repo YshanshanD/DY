@@ -111,7 +111,7 @@ public class ItemDetailActivity extends AppCompatActivity {
             shareIntent.setAction(Intent.ACTION_SEND);
             shareIntent.putExtra(Intent.EXTRA_TEXT, "this movie is pretty good, I want to share it to you" + url);
             shareIntent.setType("text/plain");
-            startActivity(shareIntent.createChooser(shareIntent, "分享到"));
+            startActivity(shareIntent.createChooser(shareIntent, "分享到"));//分享界面的弹出
         }
         if (id == R.id.action_collection) {
             if (!CurrentUser.LoginFlag) {

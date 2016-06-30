@@ -31,6 +31,7 @@ public class RegistActivity extends AppCompatActivity {
     private static final int PSD_AGAIN = 4;
 
     private StorageUtils storageUtils;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,23 +47,24 @@ public class RegistActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int flag = -1;
-                if ((flag = judgeAccount()) == CORRECT) {
+                int typeIsCorrectFlag;
+                typeIsCorrectFlag = judgeAccount();
+                if (typeIsCorrectFlag == CORRECT) {
 
 //                    String string = count.getText().toString() + "@" + psd.getText().toString();
 
+                    //判断重复
                     String readValue = new String(storageUtils.readFileFromInternal("use_info"));
-                    User user = new User();
+                    User user = new User();//要注册的用户对象
                     user.setName(count.getText().toString());
                     user.setPassWord(psd.getText().toString());
-                    user.setTitleList(new ArrayList<String>());
+                    user.setTitleList(new ArrayList<String>());//收藏列表
                     List<User> ps = new Gson().fromJson(readValue, new TypeToken<List<User>>(){}.getType());
                     boolean isNotExitUser = true;
                     try {
                         for (User bean :ps) {
                             if(bean.getName().equals(user.getName())){
                                 isNotExitUser = false;
-
                                 continue;
                             }
                         }
@@ -83,13 +85,13 @@ public class RegistActivity extends AppCompatActivity {
                     }
 
                 } else {
-                    if (flag == ACCOUTN_WRONG) {
+                    if (typeIsCorrectFlag == ACCOUTN_WRONG) {
                         Toast.makeText(RegistActivity.this, "count is wrong", Toast.LENGTH_SHORT).show();
                     }
-                    if (flag == PSW_WRONG) {
+                    if (typeIsCorrectFlag == PSW_WRONG) {
                         Toast.makeText(RegistActivity.this, "password of length must be six byte", Toast.LENGTH_SHORT).show();
                     }
-                    if (flag == PSD_AGAIN) {
+                    if (typeIsCorrectFlag == PSD_AGAIN) {
                         Toast.makeText(RegistActivity.this, "please identify password", Toast.LENGTH_SHORT).show();
                     }
 
@@ -101,29 +103,35 @@ public class RegistActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * 判断用户名和密码格式
+     * @return
+     */
     public int judgeAccount() {
+        //判断账号是否符合条件
 
-        String value = count.getText().toString();
+        String username = count.getText().toString();
 
-        boolean flag = true;
-        for (int i = 0; i < value.length(); i++) {
-            if ((value.charAt(i) >= '0' && value.charAt(i) <= '9') || (value.charAt(i) >= 'a' && value.charAt(i) <= 'z') || (value.charAt(i) >= 'A' && value.charAt(i) <= 'Z')) {
-
+        boolean countFlag = true;//账号条件符合标志
+        for (int i = 0; i < username.length(); i++) {
+            if ((username.charAt(i) >= '0' && username.charAt(i) <= '9') || (username.charAt(i) >= 'a' && username.charAt(i) <= 'z') || (username.charAt(i) >= 'A' && username.charAt(i) <= 'Z')) {
 
             } else {
-                flag = false;
+                countFlag = false;
+                break;
             }
 
         }
 
-        if (value.length() <= 11 && value.length() >= 6) {
+        if (username.length() <= 11 && username.length() >= 6) {
 
         } else {
-            flag = false;
+            countFlag = false;
         }
 
 
+
+        //判断密码是否符合指定条件
         String password = psd.getText().toString();
         Boolean pswFlag = true;
         if (password.length() == 6) {
@@ -132,9 +140,9 @@ public class RegistActivity extends AppCompatActivity {
             pswFlag = false;
         }
 
-        if (!flag) return ACCOUTN_WRONG;
+        if (!countFlag) return ACCOUTN_WRONG;
         if (!pswFlag) return PSW_WRONG;
-        if (!psd.getText().toString().equals(idenpsd.getText().toString()))
+        if (!password.equals(idenpsd.getText().toString()))
             return PSD_AGAIN;
 
 

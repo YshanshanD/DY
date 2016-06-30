@@ -69,7 +69,7 @@ public class DyMainActivity extends AppCompatActivity
 
     private View oscarContentView;//奥斯卡视图
 
-    private View collectionContentView;
+    private View collectionContentView;//收藏视图
 
     private SwipeRefreshLayout refreshLayout;
 
@@ -422,22 +422,22 @@ public class DyMainActivity extends AppCompatActivity
 
     public void initCollection() {
         toolbar.setTitle("收藏");
-        content.removeAllViews();
+        content.removeAllViews();//切换界面
 
         if (CurrentUser.LoginFlag == false) {
             Intent intent = new Intent(DyMainActivity.this, GuigeActivity.class);
             startActivity(intent);
         } else {
             if (collectionContentView == null) {
-                collectionContentView = layoutInflater.inflate(R.layout.collection_content, null, false);
+                collectionContentView = layoutInflater.inflate(R.layout.collection_content, null, false);//生成视图
             }
                 final TextView userView = (TextView) collectionContentView.findViewById(R.id.user_name);
-                final ListView listView = (ListView) collectionContentView.findViewById(R.id.list_view);
+                final ListView listView = (ListView) collectionContentView.findViewById(R.id.list_view);//列表生成
                 userView.setText(CurrentUser.user.getName());
                 Log.e("test5",CurrentUser.user.getName());
-                List<String> list = new ArrayList<>();//初始化list
+                List<String> list = new ArrayList<>();//初始化数组列表list
                 for (String value : CurrentUser.user.getTitleList()) {
-                    list.add(value);
+                    list.add(value);//
                 }
                 ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);//建一个系统自带的适配器
                 listView.setAdapter(arrayAdapter);//更新数据并显示

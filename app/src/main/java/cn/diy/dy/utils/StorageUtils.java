@@ -42,13 +42,18 @@ public class StorageUtils {
         return file_path;
     }
 
+    /**
+     * 从指定文件中读取数据
+     * @param fileName
+     * @return
+     */
     public byte[] readFileFromInternal(String fileName) {
-        FileInputStream inputStream = null;
-        File cacheDir = context.getCacheDir();
-        String filePath = new File(cacheDir, fileName).getAbsolutePath();
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        FileInputStream inputStream = null;//定义一个读文件的流
+        File cacheDir = context.getCacheDir();//得到缓存目录
+        String filePath = new File(cacheDir, fileName).getAbsolutePath();//得到指定文件的全路径
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();//定义一个字节输出流
         try {
-            inputStream = context.openFileInput(fileName);
+            inputStream = context.openFileInput(fileName);//打开指定文件，不存在抛异常
             int len = 0;
             byte[] read_data = new byte[1024];
             while ((len = inputStream.read(read_data)) != -1) {
@@ -67,7 +72,7 @@ public class StorageUtils {
                 return " ".getBytes();
             }
         }
-        return byteArrayOutputStream.toByteArray();
+        return byteArrayOutputStream.toByteArray();//返回已读出数据、字节
     }
 
 }

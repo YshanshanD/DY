@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,8 +23,6 @@ public class LoginActivity extends AppCompatActivity {
     private Button button;
     private EditText count;
     private EditText psd;
-    private CheckBox checkBox1;
-    private CheckBox checkBox2;
     private static final int CORRECT = 1;
     private static final int PSW_WRONG = 2;
     private static final int ACCOUTN_WRONG = 3;
@@ -50,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int flag = -1;
+                int flag;//整体格式判断
                 if ((flag = judgeAccount()) == CORRECT) {
 
                     String value = new String(storageUtils.readFileFromInternal("use_info"));
@@ -65,16 +62,10 @@ public class LoginActivity extends AppCompatActivity {
                     for (User bean : ps) {
                         if (bean.getName().equals(username)) {
                             isExitUser = true;
-
-                        }
-                    }
-                    if (isExitUser) {
-                        for (User bean : ps) {
-                            if (bean.getName().equals(username) && bean.getPassWord().equals(password)) {
+                            if(bean.getPassWord().equals(password)){
                                 isCorrectPsw = true;
-                                CurrentUser.user = bean;
-                                CurrentUser.LoginFlag = true;
-                                continue;
+                                CurrentUser.user = bean;//全局用户变量，
+                                CurrentUser.LoginFlag = true;//全局用户变量
                             }
                         }
                     }
