@@ -1,0 +1,10 @@
+@startuml
+class Baby{
+ -name;
+ +age;
+ -void restule()
+}
+class body
+
+Bady --> body
+@enduml

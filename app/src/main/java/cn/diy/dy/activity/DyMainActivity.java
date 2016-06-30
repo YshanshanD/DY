@@ -435,12 +435,12 @@ public class DyMainActivity extends AppCompatActivity
                 final ListView listView = (ListView) collectionContentView.findViewById(R.id.list_view);
                 userView.setText(CurrentUser.user.getName());
                 Log.e("test5",CurrentUser.user.getName());
-                List<String> list = new ArrayList<>();
+                List<String> list = new ArrayList<>();//初始化list
                 for (String value : CurrentUser.user.getTitleList()) {
                     list.add(value);
                 }
-                ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
-                listView.setAdapter(arrayAdapter);
+                ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);//建一个系统自带的适配器
+                listView.setAdapter(arrayAdapter);//更新数据并显示
                 arrayAdapter.notifyDataSetChanged();
 
             content.addView(collectionContentView);

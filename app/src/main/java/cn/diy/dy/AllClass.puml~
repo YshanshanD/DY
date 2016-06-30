@@ -1,0 +1,26 @@
+@startuml
+
+class DyMainActivity <? extends AppCompatActivity>{
+    onCreate()
+    initList()
+}
+
+List <|-- AbstractList
+Collection <|-- AbstractCollection
+
+Collection <|- List
+AbstractCollection <|- AbstractList
+AbstractList <|-- ArrayList
+
+class ArrayList {
+Object[] elementData
+size()
+}
+
+enum TimeUnit {
+DAYS
+HOURS
+MINUTES
+}
+
+@enduml

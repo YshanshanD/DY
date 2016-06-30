@@ -1,0 +1,29 @@
+@startuml
+class User{
+-username
+-password
+}
+class LoginActivity<? extends AppCompatActivity>{
+    +login()
+}
+class RegisterActivity<? extends AppCompatActivity>{
+    +regist()
+}
+
+class ItemDetailActivity<? extends AppCompatActivity>{
+    +share()
+    +collection()
+}
+
+class GuideActivity{
++onclickLogin()
++onclickRegister()
+}
+
+GuideActivity <.. LoginActivity
+GuideActivity <.. RegisterActivity
+User ..> LoginActivity
+User ..> RegisterActivity
+User ..> ItemDetailActivity
+
+@enduml

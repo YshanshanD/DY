@@ -1,0 +1,12 @@
+@startuml
+control DyMainActivity
+entity ItemDetailActivity
+boundary PlayActivity
+
+DyMainActivity -> SearchActivity :clickSearch()
+SearchActivity --> ItemDetailActivity : clickGoDetail()
+ItemDetailActivity -> ItemDetailActivity :check()
+ItemDetailActivity -> PlayActivity :play()
+PlayActivity --> PlayActivity : webViewManifest()
+
+@enduml

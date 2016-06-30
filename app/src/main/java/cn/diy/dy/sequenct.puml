@@ -1,0 +1,11 @@
+@startuml
+
+control 系统主界面
+
+系统主界面 -> 电影: go movie
+系统主界面 -> 电视剧: go tv
+系统主界面 -> 动漫: go anima
+系统主界面 -> 搜索: go serach
+系统主界面 -> 奥斯卡: go oscar
+
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+
+class DyMainActivity<? extends AppCompatActivity>{
+    -stateID
+    -clickMovie()
+    -clickTv()
+    -clickOscar()
+    -clickAnima()
+}
+
+class PlayActivity<? extends AppCompatActivity>{
+    -Url
+    -webViewMainfest()
+}
+
+class ItemDetailActivity<? extends AppCompatActivity>{
+    -mItem
+    -play()
+    -check()
+}
+
+DyMainActivity <.. ItemDetailActivity
+ItemDetailActivity <.. PlayActivity
+
+@enduml

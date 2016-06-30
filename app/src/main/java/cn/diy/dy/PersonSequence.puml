@@ -1,0 +1,10 @@
+@startuml
+actor User
+control GuideActivity
+GuideActivity -> RegisterAcitivity : clickRegister()
+GuideActivity -> LoginAcitivity : clickLogin()
+RegisterActivity -> User : registe(User user)
+LoginActivity -> User : login(User user)
+User -> ItemDetailActivity : share()
+User -> ItemDetailActivity : collection()
+@enduml

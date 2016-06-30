@@ -60,11 +60,12 @@ public class LoginActivity extends AppCompatActivity {
                     Log.i("test5", "json size == " + ps.size());
                     String username = count.getText().toString();
                     String password = psd.getText().toString();
-                    boolean isExitUser = true;
+                    boolean isExitUser = false;
                     boolean isCorrectPsw = false;
                     for (User bean : ps) {
-                        if (bean.getName() == username) {
-                            isExitUser = false;
+                        if (bean.getName().equals(username)) {
+                            isExitUser = true;
+
                         }
                     }
                     if (isExitUser) {

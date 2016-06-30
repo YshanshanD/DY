@@ -1,0 +1,79 @@
+@startuml
+
+package "activity" #DDDDDD{
+class DyMainActivity <? extends AppCompatActivity>{
+	onCreate()
+	initList()
+	initTv()
+	initMovie()
+	initOscar()
+	initSearch()
+	initCollection()
+}
+
+class GuigeActivity<? extends AppCompatActivity>{
+
+}
+class LoginActivity<? extends AppCompatActivity>{
+
+}
+class MainActivity<? extends AppCompatActivity>{
+
+}
+class PlayActivity<? extends AppCompatActivity>{
+
+}
+class RegisterActivity<? extends AppCompatActivity>{
+
+}
+class SearchActivity<? extends AppCompatActivity>{
+
+}
+}
+
+package "adapter" #DDDDDD{
+class MovieViewPagerAdapter<? extends FragmentPagerAdapter>{
+}
+ class SearchResultAdapter<? extends BaseAdapter>{
+ }
+ class SearchViewPagerAdapter<? extends FragmentPagerAdapter>{
+ }
+}
+
+package "fragment" #DDDDDD{
+class MovieFragment<? extends Fragment>{
+}
+class MymovieRecyclerViewAdapter<? extends RecyclerView.Adapter<MymovieRecyclerViewAdapter.ViewHolder>>{
+}
+class OscarFragment<? extends Fragment>{
+}
+class ResultItemFragment<? extends Fragment>{
+}
+}
+
+package "utils" #DDDDDD{
+class CommonUtils
+class JsonUtils
+class StorageUtils
+}
+
+
+List <|-- AbstractList
+Collection <|-- AbstractCollection
+
+Collection <|- List
+AbstractCollection <|- AbstractList
+AbstractList <|-- ArrayList
+
+class ArrayList {
+Object[] elementData
+size()
+}
+
+enum TimeUnit {
+DAYS
+HOURS
+MINUTES
+}
+
+@enduml
