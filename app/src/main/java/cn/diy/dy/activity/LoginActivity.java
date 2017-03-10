@@ -49,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int flag;//整体格式判断
                 if ((flag = judgeAccount()) == CORRECT) {
-
                     String value = new String(storageUtils.readFileFromInternal("use_info"));
                     Log.i("test5", "read json == " + value);
                     List<User> ps = new Gson().fromJson(value, new TypeToken<List<User>>() {
@@ -62,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
                     for (User bean : ps) {
                         if (bean.getName().equals(username)) {
                             isExitUser = true;
-                            if(bean.getPassWord().equals(password)){
+                            if (bean.getPassWord().equals(password)) {
                                 isCorrectPsw = true;
                                 CurrentUser.user = bean;//全局用户变量，
                                 CurrentUser.LoginFlag = true;//全局用户变量
@@ -86,38 +85,24 @@ public class LoginActivity extends AppCompatActivity {
                     if (flag == PSW_WRONG) {
                         Toast.makeText(LoginActivity.this, "password is wrong", Toast.LENGTH_SHORT).show();
                     }
-
                 }
-
             }
         });
-
-
     }
 
-
     public int judgeAccount() {
-
         String value = count.getText().toString();
-
         boolean flag = true;
         for (int i = 0; i < value.length(); i++) {
             if ((value.charAt(i) >= '0' && value.charAt(i) <= '9') || (value.charAt(i) >= 'a' && value.charAt(i) <= 'z') || (value.charAt(i) >= 'A' && value.charAt(i) <= 'Z')) {
-
-
             } else {
                 flag = false;
             }
-
         }
-
         if (value.length() <= 11 && value.length() >= 6) {
-
         } else {
             flag = false;
         }
-
-
         String password = psd.getText().toString();
         Boolean pswFlag = true;
         if (password.length() == 6) {
@@ -125,11 +110,8 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             pswFlag = false;
         }
-
         if (!flag) return ACCOUTN_WRONG;
         if (!pswFlag) return PSW_WRONG;
-
-
         return CORRECT;
     }
 

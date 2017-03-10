@@ -2,31 +2,17 @@
 
 class DyMainActivity<? extends AppCompatActivity>{
     -stateID
-    -clickMovie()
-    -clickTv()
-    -clickOscar()
-    -clickAnima()
+    -clickSearch()
 }
 
 class SearchActivity<? extend AppCompatActivity>{
     -text
-    -search()
+    -search(String text)
 }
-
-class PlayActivity<? extends AppCompatActivity>{
-    -Url
-    -webViewMainfest()
+class ItemDetailActivity{
+    -info
 }
-
-class ItemDetailActivity<? extends AppCompatActivity>{
-    -mItem
-    -play()
-    -check()
-}
-
-
-DyMainActivity <.. SearchActivity
-SearchActivity <.. ItemDetailActivity
-ItemDetailActivity <.. PlayActivity
+DyMainActivity ..> SearchActivity
+SearchActivity ..> ItemDetailActivity
 
 @enduml

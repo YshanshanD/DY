@@ -6,3 +6,7 @@
 .DS_Store
 /build
 /captures
+projectFilesBackup
+.idea/markdown-navigator
+.idea/markdown-navigator.xml
+*.puml

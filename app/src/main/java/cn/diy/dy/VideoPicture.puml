@@ -19,7 +19,7 @@ class ItemDetailActivity<? extends AppCompatActivity>{
     -check()
 }
 
-DyMainActivity <.. ItemDetailActivity
-ItemDetailActivity <.. PlayActivity
+DyMainActivity ..> ItemDetailActivity
+ItemDetailActivity ..> PlayActivity
 
 @enduml

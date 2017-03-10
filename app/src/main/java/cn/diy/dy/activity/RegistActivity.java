@@ -50,10 +50,6 @@ public class RegistActivity extends AppCompatActivity {
                 int typeIsCorrectFlag;
                 typeIsCorrectFlag = judgeAccount();
                 if (typeIsCorrectFlag == CORRECT) {
-
-//                    String string = count.getText().toString() + "@" + psd.getText().toString();
-
-                    //判断重复
                     String readValue = new String(storageUtils.readFileFromInternal("use_info"));
                     User user = new User();//要注册的用户对象
                     user.setName(count.getText().toString());
@@ -83,7 +79,6 @@ public class RegistActivity extends AppCompatActivity {
                         Log.i("test5","count is exit");
                         Toast.makeText(RegistActivity.this, "count is exit", Toast.LENGTH_SHORT).show();
                     }
-
                 } else {
                     if (typeIsCorrectFlag == ACCOUTN_WRONG) {
                         Toast.makeText(RegistActivity.this, "count is wrong", Toast.LENGTH_SHORT).show();
@@ -94,13 +89,9 @@ public class RegistActivity extends AppCompatActivity {
                     if (typeIsCorrectFlag == PSD_AGAIN) {
                         Toast.makeText(RegistActivity.this, "please identify password", Toast.LENGTH_SHORT).show();
                     }
-
                 }
-
             }
         });
-
-
     }
 
     /**

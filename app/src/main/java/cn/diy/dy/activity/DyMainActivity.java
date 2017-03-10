@@ -1,5 +1,4 @@
 package cn.diy.dy.activity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -423,7 +422,6 @@ public class DyMainActivity extends AppCompatActivity
     public void initCollection() {
         toolbar.setTitle("收藏");
         content.removeAllViews();//切换界面
-
         if (CurrentUser.LoginFlag == false) {
             Intent intent = new Intent(DyMainActivity.this, GuigeActivity.class);
             startActivity(intent);
@@ -442,10 +440,8 @@ public class DyMainActivity extends AppCompatActivity
                 ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);//建一个系统自带的适配器
                 listView.setAdapter(arrayAdapter);//更新数据并显示
                 arrayAdapter.notifyDataSetChanged();
-
             content.addView(collectionContentView);
         }
-
     }
 
     @Override
