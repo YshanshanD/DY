@@ -10,3 +10,4 @@ projectFilesBackup
 .idea/markdown-navigator
 .idea/markdown-navigator.xml
 *.puml
+.idea/misc.xml
